@@ -1,0 +1,52 @@
+<div class="container mt-5">
+  <h2>Categories</h2>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          {{ editingCategoryId ? 'Edit Category' : 'Add New Category' }}
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="editingCategoryId ? updateCategory() : createCategory()">
+            <div class="form-group">
+              <label for="categoryName">Name</label>
+              <input type="text" class="form-control" id="categoryName" name="categoryName" [(ngModel)]="newCategory.name" required>
+            </div>
+            <div class="form-group">
+              <label for="categoryColor">Color (Hex)</label>
+              <input type="text" class="form-control" id="categoryColor" name="categoryColor" [(ngModel)]="newCategory.color" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">
+              {{ editingCategoryId ? 'Update' : 'Add' }}
+            </button>
+            <button *ngIf="editingCategoryId" type="button" class="btn btn-secondary mt-3 ms-2" (click)="cancelEdit()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let category of categories">
+          <div class="d-flex align-items-center">
+            <span [style.background-color]="category.color" class="color-dot me-2"></span>
+            <span>{{ category.name }}</span>
+          </div>
+          <div>
+            <button class="btn btn-warning btn-sm me-2" (click)="editCategory(category)">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteCategory(category.id)">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<style>
+  .color-dot {
+    height: 20px;
+    width: 20px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }
+</style>

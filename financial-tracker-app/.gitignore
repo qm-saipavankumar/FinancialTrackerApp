@@ -1,0 +1,60 @@
+# Visual Studio & IDE files
+.vs/                   # Visual Studio solution user-specific settings folder
+*.suo                  # Visual Studio Solution User Options
+*.user                 # Visual Studio User Options (for project files)
+*.vsidx                # Visual Studio indexing files
+*.db                   # General database files (catches Copilot/indexing dbs)
+*.db-shm               # Shared memory file for sqlite databases
+*.db-wal               # Write-ahead log file for sqlite databases
+CopilotIndices/        # GitHub Copilot's local data
+FileContentIndex/      # Visual Studio's content indexing data
+*.slnx.sqlite          # Visual Studio Solution Explorer workspace cache
+VSWorkspaceState.json  # Visual Studio workspace state
+
+# Compiled output
+/dist                  # Angular build output
+/tmp
+/out-tsc
+/bazel-out
+bin/                   # .NET compiled binaries
+obj/                   # .NET intermediate build output
+
+# Node.js and Angular specific
+/node_modules
+npm-debug.log
+yarn-error.log
+package-lock.json      # You might want to commit this, but often ignored in early development
+yarn.lock              # Same as above, but for yarn
+/.angular/cache        # Angular's build cache folder
+
+# IDEs and editors (general)
+.idea/                 # IntelliJ / WebStorm project files
+.project
+.classpath
+.c9/                   # Cloud9 IDE files
+*.launch
+.settings/
+*.sublime-workspace    # Sublime Text workspace files
+
+# Visual Studio Code specific
+.vscode/*
+!.vscode/settings.json # Keep settings if you want to share workspace settings
+!.vscode/tasks.json    # Keep tasks if you want to share build/debug tasks
+!.vscode/launch.json   # Keep launch configs if you want to share debug configurations
+!.vscode/extensions.json # Keep recommended extensions
+.history/              # VS Code Local History extension data
+
+# Miscellaneous
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store              # macOS folder metadata
+Thumbs.db              # Windows thumbnail cache
+/.vs
+/.angular/cache/16.2.16/angular-webpack
+/.angular/cache/16.2.16/babel-webpack

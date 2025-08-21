@@ -1,0 +1,70 @@
+<div class="container mt-5">
+  <h2>Budgets</h2>
+  <div class="row">
+    <!-- Form to Add/Edit Budget -->
+    <div class="col-12 col-md-4 mb-4">
+      <div class="card">
+        <div class="card-header">
+          {{ editingBudgetId ? 'Edit Budget' : 'Add New Budget' }}
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="editingBudgetId ? updateBudget() : createBudget()">
+            <div class="form-group">
+              <label for="amount">Amount</label>
+              <input type="number" class="form-control" id="amount" name="amount" [(ngModel)]="newBudget.amount" required>
+            </div>
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select class="form-control" id="category" name="categoryId" [(ngModel)]="newBudget.categoryId" required>
+                <option [ngValue]="null" disabled>Select a category</option>
+                <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="startDate">Start Date</label>
+              <input type="date" class="form-control" id="startDate" name="startDate" [(ngModel)]="newBudget.startDate" required>
+            </div>
+            <div class="form-group">
+              <label for="endDate">End Date</label>
+              <input type="date" class="form-control" id="endDate" name="endDate" [(ngModel)]="newBudget.endDate" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">
+              {{ editingBudgetId ? 'Update' : 'Add' }}
+            </button>
+            <button *ngIf="editingBudgetId" type="button" class="btn btn-secondary mt-3 ms-2" (click)="cancelEdit()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Budgets List with Progress Bars -->
+    <div class="col-12 col-md-8">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let budget of budgets">
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <h5 class="mb-1">Budget for {{ budget.categoryName }}</h5>
+            <div class="text-end">
+              <small class="d-block">{{ budget.remainingAmount | currency }} remaining</small>
+              <small class="text-muted d-block">{{ budget.currentSpend | currency }} of {{ budget.amount | currency }}</small>
+            </div>
+          </div>
+          <p class="mb-1 text-muted">
+            {{ budget.startDate | date }} - {{ budget.endDate | date }}
+          </p>
+          <div class="progress mt-2">
+            <div class="progress-bar" role="progressbar"
+                 [ngClass]="getProgressBarClass(budget)"
+                 [style.width]="(getProgressPercentage(budget) > 100 ? 100 : getProgressPercentage(budget)) + '%'"
+                 [attr.aria-valuenow]="getProgressPercentage(budget)" aria-valuemin="0"
+                 [attr.aria-valuemax]="budget.amount">
+            </div>
+          </div>
+          <div class="mt-2 text-end">
+            <button class="btn btn-warning btn-sm me-2" (click)="editBudget(budget)">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteBudget(budget.id)">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

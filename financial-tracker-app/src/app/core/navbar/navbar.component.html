@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/dashboard">Financial Tracker</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- These links are only shown when the user is logged in -->
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/transactions" routerLinkActive="active">Transactions</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/budgets" routerLinkActive="active">Budgets</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn()">
+          <a class="nav-link" routerLink="/categories" routerLinkActive="active">Categories</a>
+        </li>
+      </ul>
+      <div class="d-flex" *ngIf="isLoggedIn()">
+        <button class="btn btn-outline-light" (click)="onLogout()">Logout</button>
+      </div>
+      <div class="d-flex" *ngIf="!isLoggedIn()">
+        <a class="btn btn-outline-light me-2" routerLink="/login" routerLinkActive="active">Login</a>
+        <a class="btn btn-light" routerLink="/register" routerLinkActive="active">Register</a>
+      </div>
+    </div>
+  </div>
+</nav>

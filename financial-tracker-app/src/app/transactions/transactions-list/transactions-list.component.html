@@ -1,0 +1,114 @@
+<div class="container mt-5">
+  <div class="row">
+    <!-- Form to Add/Edit Transaction -->
+    <div class="col-12 col-md-4 mb-4">
+      <div class="card">
+        <div class="card-header">
+          {{ editingTransactionId ? 'Edit Transaction' : 'Add New Transaction' }}
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="editingTransactionId ? updateTransaction() : createTransaction()">
+            <div class="form-group">
+              <label for="amount">Amount</label>
+              <input type="number" class="form-control" id="amount" name="amount" [(ngModel)]="newTransaction.amount" required>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <input type="text" class="form-control" id="description" name="description" [(ngModel)]="newTransaction.description" required>
+            </div>
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input type="date" class="form-control" id="date" name="date" [(ngModel)]="newTransaction.date" required>
+            </div>
+            <div class="form-group">
+              <label for="isExpense">Type</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="isExpense" id="isExpenseYes" [value]="true" [(ngModel)]="newTransaction.isExpense">
+                <label class="form-check-label" for="isExpenseYes">
+                  Expense
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="isExpense" id="isExpenseNo" [value]="false" [(ngModel)]="newTransaction.isExpense">
+                <label class="form-check-label" for="isExpenseNo">
+                  Income
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select class="form-control" id="category" name="categoryId" [(ngModel)]="newTransaction.categoryId" required>
+                <option [ngValue]="null" disabled>Select a category</option>
+                <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name }}</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">
+              {{ editingTransactionId ? 'Update' : 'Add' }}
+            </button>
+            <button *ngIf="editingTransactionId" type="button" class="btn btn-secondary mt-3 ms-2" (click)="cancelEdit()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Transaction List with Search and Filters -->
+    <div class="col-12 col-md-8">
+      <h3>Transactions</h3>
+      
+      <!-- Search and Filter Bar -->
+      <div class="row mb-3 align-items-center">
+        <div class="col-12 col-lg-4 mb-2 mb-lg-0">
+          <input type="text" class="form-control" placeholder="Search by description..." [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()">
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 mb-2 mb-sm-0">
+          <select class="form-control" [(ngModel)]="selectedCategoryId" (ngModelChange)="applyFilters()">
+            <option [ngValue]="null">All Categories</option>
+            <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name }}</option>
+          </select>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 mb-2 mb-sm-0">
+          <div class="input-group">
+            <input type="date" class="form-control" [(ngModel)]="startDate" (ngModelChange)="applyFilters()">
+            <input type="date" class="form-control" [(ngModel)]="endDate" (ngModelChange)="applyFilters()">
+          </div>
+        </div>
+        <div class="col-12 col-lg-2 text-end">
+          <button class="btn btn-outline-secondary" (click)="resetFilters()">Reset</button>
+        </div>
+      </div>
+      
+      <!-- Transaction List Table -->
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th (click)="toggleSortDirection('description')">Description</th>
+              <th (click)="toggleSortDirection('amount')">Amount</th>
+              <th>Category</th>
+              <th (click)="toggleSortDirection('date')">Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of filteredTransactions">
+              <td>{{ transaction.description }}</td>
+              <td [ngClass]="{'text-danger': transaction.isExpense, 'text-success': !transaction.isExpense}">
+                {{ transaction.isExpense ? '-' : '+' }}{{ transaction.amount | currency }}
+              </td>
+              <td>
+                <span class="badge rounded-pill" [style.background-color]="transaction.categoryColor">
+                  {{ transaction.categoryName  }}
+                </span>
+              </td>
+              <td>{{ transaction.date | date }}</td>
+              <td>
+                <button class="btn btn-warning btn-sm me-2" (click)="editTransaction(transaction)">Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="deleteTransaction(transaction.id)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

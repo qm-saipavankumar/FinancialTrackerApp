@@ -1,0 +1,235 @@
+<div class="container-fluid mt-4">
+  <h1 class="mb-4 text-center">Financial Dashboard</h1>
+
+  <div *ngIf="loading" class="d-flex justify-content-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <!-- Top Row: Summary, This Month, Last Month, Credit Cards (Simplified) -->
+  <div class="row mb-4 g-3" *ngIf="summary">
+    <!-- Summary Card -->
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm rounded-3 h-100">
+        <div class="card-body">
+          <h5 class="card-title text-primary mb-3">Summary</h5>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span>Balance:</span>
+            <span class="fw-bold fs-5" [ngClass]="{'text-success': summary.netBalance >= 0, 'text-danger': summary.netBalance < 0}">
+              {{ summary.netBalance | currency }}
+            </span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span>Total Income:</span>
+            <span class="fw-bold text-success">{{ summary.totalIncome | currency }}</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span>Total Expenses:</span>
+            <span class="fw-bold text-danger">{{ summary.totalExpenses | currency }}</span>
+          </div>
+          <!-- You can add Credit Card summary here if you have that data -->
+          <!-- <div class="d-flex justify-content-between align-items-center mt-3">
+            <span>Credit cards:</span>
+            <span class="fw-bold text-danger">-$13,378.71</span>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- This Month Card -->
+    <div class="col-12 col-md-4" *ngIf="currentMonthSummary">
+      <!-- FIX: Add *ngIf="currentMonthSummary" -->
+      <div class="card shadow-sm rounded-3 h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <h5 class="card-title text-center mb-3">This Month</h5>
+          <div class="position-relative d-flex justify-content-center align-items-center" style="width: 120px; height: 120px;">
+            <canvas baseChart
+                    [data]="currentMonthDoughnutChartData"
+                    [options]="currentMonthDoughnutOptions"
+                    [type]="currentMonthDoughnutChartType">
+            </canvas>
+            <div class="position-absolute text-center">
+              <span class="d-block fw-bold fs-6" [ngClass]="{'text-success': currentMonthSummary.netBalance >= 0, 'text-danger': currentMonthSummary.netBalance < 0}">
+                {{ currentMonthSummary.netBalance | currency }}
+              </span>
+              <small class="text-muted">Net</small>
+            </div>
+          </div>
+          <div class="mt-3 w-100">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <small class="text-success">Income</small>
+              <small class="fw-bold text-success">{{ currentMonthSummary.totalIncome | currency }}</small>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-danger">Expenses</small>
+              <small class="fw-bold text-danger">{{ currentMonthSummary.totalExpenses | currency }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Last Month Card -->
+    <div class="col-12 col-md-4" *ngIf="lastMonthSummary">
+      <!-- FIX: Add *ngIf="lastMonthSummary" -->
+      <div class="card shadow-sm rounded-3 h-100">
+        <div class="card-body d-flex flex-column align-items-center justify-content-center">
+          <h5 class="card-title text-center mb-3">Last Month</h5>
+          <div class="position-relative d-flex justify-content-center align-items-center" style="width: 120px; height: 120px;">
+            <canvas baseChart
+                    [data]="lastMonthDoughnutChartData"
+                    [options]="lastMonthDoughnutOptions"
+                    [type]="lastMonthDoughnutChartType">
+            </canvas>
+            <div class="position-absolute text-center">
+              <span class="d-block fw-bold fs-6" [ngClass]="{'text-success': lastMonthSummary.netBalance >= 0, 'text-danger': lastMonthSummary.netBalance < 0}">
+                {{ lastMonthSummary.netBalance | currency }}
+              </span>
+              <small class="text-muted">Net</small>
+            </div>
+          </div>
+          <div class="mt-3 w-100">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <small class="text-success">Income</small>
+              <small class="fw-bold text-success">{{ lastMonthSummary.totalIncome | currency }}</small>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-danger">Expenses</small>
+              <small class="fw-bold text-danger">{{ lastMonthSummary.totalExpenses | currency }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Middle Row: Accounts, Balance Line Chart -->
+  <div class="row mb-4 g-3">
+    <!-- Accounts/Credit Cards (Simplified for now) -->
+    <div class="col-12 col-lg-4">
+      <div class="card shadow-sm rounded-3 h-100">
+        <div class="card-body">
+          <h5 class="card-title text-primary mb-3">Accounts</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>Wallet</span>
+              <span class="fw-bold text-success">$90.24 USD</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>Bank Account</span>
+              <span class="fw-bold text-success">$13,537.47 USD</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>Credit Card</span>
+              <span class="fw-bold text-danger">-$140.00</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Balance Line Chart (Placeholder for now) -->
+    <div class="col-12 col-lg-8">
+      <div class="card shadow-sm rounded-3 h-100">
+        <div class="card-header text-center bg-light">
+          <h5>Balance Over Time</h5>
+        </div>
+        <div class="card-body">
+          <!-- TODO: Implement actual Balance Line Chart -->
+          <p class="text-muted text-center">Chart data for balance over time will appear here.</p>
+          <div style="display: block;">
+            <canvas baseChart
+                    [options]="barChartOptions"
+                    [data]="barChartData"
+                    [type]="barChartType">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Row: Last 7 Days, Budgets, Recent Transactions -->
+  <div class="row mb-4 g-3">
+    <!-- Monthly Income vs. Expenses Bar Chart (Existing) -->
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm rounded-3 h-100">
+        <div class="card-header text-center bg-light">
+          <h5>Monthly Income vs. Expenses</h5>
+        </div>
+        <div class="card-body">
+          <div style="display: block;">
+            <canvas baseChart
+                    [options]="barChartOptions"
+                    [data]="barChartData"
+                    [type]="barChartType">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Budgets Section (Condensed) -->
+    <div class="col-12 col-lg-6">
+      <div class="card shadow-sm rounded-3 h-100">
+        <div class="card-body">
+          <h5 class="card-title text-primary mb-3">Budgets</h5>
+          <ul class="list-group list-group-flush">
+            <!-- Loop through a few recent budgets, similar to budgets-list component -->
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let budget of budgets | slice:0:3">
+              <div>
+                <span class="badge rounded-pill me-2" [style.background-color]="budget.categoryColor">{{ budget.categoryName }}</span>
+                <small class="text-muted">{{ budget.startDate | date:'shortDate' }} - {{ budget.endDate | date:'shortDate' }}</small>
+              </div>
+              <div class="text-end">
+                <small [ngClass]="{'text-danger': budget.remainingAmount < 0, 'text-success': budget.remainingAmount >= 0}">
+                  {{ budget.remainingAmount | currency }} remaining
+                </small>
+                <div class="progress mt-1" style="height: 8px; width: 80px;">
+                  <div class="progress-bar" role="progressbar"
+                       [ngClass]="getProgressBarClass(budget)"
+                       [style.width]="(getProgressPercentage(budget) > 100 ? 100 : getProgressPercentage(budget)) + '%'">
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item text-center" *ngIf="budgets && budgets.length > 3">
+              <a routerLink="/budgets" class="btn btn-link btn-sm">View All Budgets</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions Section -->
+  <div class="row mb-4 g-3">
+    <div class="col-12">
+      <div class="card shadow-sm rounded-3">
+        <div class="card-body">
+          <h5 class="card-title text-primary mb-3">Recent Transactions</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let transaction of recentTransactions | slice:0:5">
+              <div>
+                <span class="badge rounded-pill me-2" [style.background-color]="transaction.categoryColor">{{ transaction.categoryName }}</span>
+                <span>{{ transaction.description }}</span>
+              </div>
+              <div class="text-end">
+                <span [ngClass]="{'text-danger': transaction.isExpense, 'text-success': !transaction.isExpense}">
+                  {{ transaction.isExpense ? '-' : '+' }}{{ transaction.amount | currency }}
+                </span>
+                <small class="d-block text-muted">{{ transaction.date | date:'shortDate' }}</small>
+              </div>
+            </li>
+            <li class="list-group-item text-center" *ngIf="recentTransactions && recentTransactions.length > 5">
+              <a routerLink="/transactions" class="btn btn-link btn-sm">View All Transactions</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
