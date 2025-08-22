@@ -1,0 +1,47 @@
+    name: Angular CI
+
+    on:
+      push:
+        branches:
+          - master # or main, depending on your default branch name
+        paths:
+          - 'financial-tracker-app/**' # Trigger only if changes are within the Angular project folder
+      pull_request:
+        branches:
+          - master # or main
+        paths:
+          - 'financial-tracker-app/**'
+
+    jobs:
+      build-angular:
+        runs-on: ubuntu-latest # Use a Linux-based runner for faster builds
+
+        steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3 # Action to check out your repository code
+
+        - name: Set up Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: '16' # Specify a Node.js version compatible with your Angular 16 project
+
+        - name: Install Angular Dependencies
+          run: npm install # Install project dependencies
+          working-directory: ./financial-tracker-app # Run command in your Angular project's folder
+
+        - name: Build Angular Application
+          run: npm run build -- --configuration=production # Build the Angular app for production
+          working-directory: ./financial-tracker-app # Run command in your Angular project's folder
+
+        # Optional: Uncomment the section below if you have Angular unit tests and want to run them in CI
+        # - name: Run Angular Tests
+        #   run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+        #   working-directory: ./financial-tracker-app
+
+        # Optional: Upload the production build as an artifact. Useful if you want to deploy it later.
+        # - name: Upload Angular Build Artifact
+        #   uses: actions/upload-artifact@v3
+        #   with:
+        #     name: angular-dist
+        #     path: ./financial-tracker-app/dist
+    

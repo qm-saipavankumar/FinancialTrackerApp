@@ -1,0 +1,52 @@
+    name: .NET CI
+
+    on:
+      push:
+        branches:
+          - master # or main
+        paths:
+          - 'FinancialTracker.Api/**' # Trigger only if changes are within the .NET API project folder
+      pull_request:
+        branches:
+          - master # or main
+        paths:
+          - 'FinancialTracker.Api/**'
+
+    jobs:
+      build-dotnet:
+        runs-on: ubuntu-latest # Use a Linux-based runner
+
+        steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
+
+        - name: Setup .NET SDK
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: '6.0.x' # IMPORTANT: Match this to your specific .NET Core version (e.g., '6.0.x', '7.0.x', '8.0.x')
+
+        - name: Restore .NET Dependencies
+          run: dotnet restore # Restore NuGet packages
+          working-directory: ./FinancialTracker.Api # Run command in your .NET project's folder
+
+        - name: Build .NET Project
+          run: dotnet build --configuration Release --no-restore # Build the project in Release mode
+          working-directory: ./FinancialTracker.Api
+
+        # Optional: Uncomment the section below if you have .NET unit tests and want to run them in CI
+        # - name: Run .NET Tests
+        #   run: dotnet test --no-build --verbosity normal
+        #   working-directory: ./FinancialTracker.Api
+
+        # Optional: Publish the API for deployment later. This creates a ready-to-deploy folder.
+        # - name: Publish .NET API
+        #   run: dotnet publish --configuration Release --no-build --output publish
+        #   working-directory: ./FinancialTracker.Api
+
+        # Optional: Upload the published API as an artifact
+        # - name: Upload .NET Publish Artifact
+        #   uses: actions/upload-artifact@v3
+        #   with:
+        #     name: dotnet-api-publish
+        #     path: ./FinancialTracker.Api/publish
+    
