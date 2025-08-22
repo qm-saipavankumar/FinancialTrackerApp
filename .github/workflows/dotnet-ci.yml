@@ -23,7 +23,7 @@
         - name: Setup .NET SDK
           uses: actions/setup-dotnet@v3
           with:
-            dotnet-version: '6.0.x' # IMPORTANT: Match this to your specific .NET Core version (e.g., '6.0.x', '7.0.x', '8.0.x')
+            dotnet-version: '8.0.x' # IMPORTANT: Match this to your specific .NET Core version (e.g., '6.0.x', '7.0.x', '8.0.x')
 
         - name: Restore .NET Dependencies
           run: dotnet restore # Restore NuGet packages
