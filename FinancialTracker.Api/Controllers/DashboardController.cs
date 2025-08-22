@@ -73,6 +73,7 @@ namespace FinancialTracker.Api.Controllers
 
             return Ok(expensesByCategory);
         }
+
         [HttpGet("monthly-summary")]
         public async Task<ActionResult<IEnumerable<MonthlySummaryDto>>> GetMonthlySummary()
         {
