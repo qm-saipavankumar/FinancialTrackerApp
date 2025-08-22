@@ -119,7 +119,6 @@ namespace FinancialTracker.Api.Controllers
         }
 
 
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBudget(int id)
         {
