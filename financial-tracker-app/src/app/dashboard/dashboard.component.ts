@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit {
             backgroundColor: [],
         }]
     };
+
     public pieChartType: ChartType = 'pie';
     private expensesByCategory: any[] = [];
 
