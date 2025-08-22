@@ -17,6 +17,7 @@ import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 
 
 export class DashboardComponent implements OnInit {
+
     summary: DashboardSummary | null = null;
     loading = true;
     error = '';
