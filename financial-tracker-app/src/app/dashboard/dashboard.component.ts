@@ -33,7 +33,8 @@ export class DashboardComponent implements OnInit {
         }
     };
 
-    public pieChartData: ChartData<'pie', number[], string | string[]> = {
+  public pieChartData: ChartData<'pie', number[], string | string[]> = {
+
         labels: [],
         datasets: [{
             data: [],
