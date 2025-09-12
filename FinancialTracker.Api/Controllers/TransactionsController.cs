@@ -92,7 +92,7 @@ namespace FinancialTracker.Api.Controllers
             {
                 Description = transactionDto.Description,
                 Amount = transactionDto.Amount,
-                Date = transactionDto.Date,
+                Date = DateTime.SpecifyKind(transactionDto.Date, DateTimeKind.Utc),
                 IsExpense = transactionDto.IsExpense,
                 CategoryId = transactionDto.CategoryId,
                 UserId = userId

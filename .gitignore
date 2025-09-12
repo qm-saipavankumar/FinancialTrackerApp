@@ -1,0 +1,25 @@
+﻿# Ignore Visual Studio user-specific files and directories
+.vs/
+*.suo
+*.user
+
+# Ignore build output directories
+[Bb]in/
+[Oo]bj/
+
+# Ignore specific database and temporary files
+financialtracker.db
+CodeChunks.db
+
+# Ignore version-specific Visual Studio files
+*.v17
+
+# Ignore NuGet package restore folder (if not using <PackageReference> implicitly)
+# packages/
+
+# Ignore other common IDE/environment files
+.DS_Store
+Thumbs.db
+
+# Ignore Node.js dependencies (if applicable)
+# node_modules/
